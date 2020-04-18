@@ -35,21 +35,8 @@ class Names {
     return items;
   }
 
-  List<String> getNames() {
-    var list = [
-      'Renata',
-      'Thiago',
-      'Maria Eduarda',
-      'Alice',
-      'Andréia Layra',
-      'Álvaro',
-    ];
-
-    return shuffle(list);
-  }
-
   String getRandomName() {
-    return getNames()[0];
+    return _getRandomNames()[0];
   }
 
   List<String> _getRandomNames() {

@@ -10,23 +10,12 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //var names = new Names();
     return MaterialApp(
       title: 'MyFamilyApp',
-      debugShowCheckedModeBanner: false,
-      /*
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Membros da família'),
-        ),
-        body: Center(
-          child: Text(
-            //new Names().getRandomName(),
-            new Names().getRandomNames(10)[0],
-          ),
-        ),
+      theme: ThemeData(
+        primaryColor: Colors.purple,
       ),
-      */
+      debugShowCheckedModeBanner: false,
       home: FamilyRandomNames(),
     );
   }
@@ -34,14 +23,32 @@ class MyApp extends StatelessWidget {
 
 class FamilyRandomNamesState extends State<FamilyRandomNames> {
   final _suggestions = <String>[];
+  final Set<String> _saved = Set<String>();
   final _biggerFonts = const TextStyle(fontSize: 18.0);
 
   Widget _buildRow(String name) {
+    final alreadySaved = _saved.contains(name);
+
     return ListTile(
       title: Text(
         name,
         style: _biggerFonts,
       ),
+      trailing: Icon(
+        alreadySaved ? Icons.favorite : Icons.favorite_border,
+        color: alreadySaved ? Colors.red : null,
+      ),
+      onTap: () {
+        setState(() {
+          print('O botao ($name) foi pressionado.');
+
+          if (alreadySaved) {
+            _saved.remove(name);
+          } else {
+            _saved.add(name);
+          }
+        });
+      },
     );
   }
 
@@ -65,11 +72,51 @@ class FamilyRandomNamesState extends State<FamilyRandomNames> {
         });
   }
 
+  void _pushSaved() {
+    print('pressionou o botao List');
+
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          final Iterable<ListTile> tiles = _saved.map(
+            (String name) {
+              return ListTile(
+                title: Text(
+                  name,
+                  style: _biggerFonts,
+                ),
+              );
+            },
+          );
+          final List<Widget> divided = ListTile.divideTiles(
+            context: context,
+            tiles: tiles,
+          ).toList();
+
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Nomes salvos'),
+            ),
+            body: ListView(
+              children: divided,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Gerador de nomes'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.list),
+            onPressed: _pushSaved,
+          )
+        ],
       ),
       body: _buildSuggestions(),
     );
