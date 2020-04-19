@@ -11,17 +11,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MyFamilyApp',
+      title: 'MyInfiniteListApp',
       theme: ThemeData(
         primaryColor: Colors.purple,
       ),
       debugShowCheckedModeBanner: false,
-      home: FamilyRandomNames(),
+      home: RandomNames(),
     );
   }
 }
 
-class FamilyRandomNamesState extends State<FamilyRandomNames> {
+class RandomNamesState extends State<RandomNames> {
   final _suggestions = <String>[];
   final Set<String> _saved = Set<String>();
   final _biggerFonts = const TextStyle(fontSize: 18.0);
@@ -123,9 +123,9 @@ class FamilyRandomNamesState extends State<FamilyRandomNames> {
   }
 }
 
-class FamilyRandomNames extends StatefulWidget {
+class RandomNames extends StatefulWidget {
   @override
-  FamilyRandomNamesState createState() {
-    return FamilyRandomNamesState();
+  RandomNamesState createState() {
+    return RandomNamesState();
   }
 }
